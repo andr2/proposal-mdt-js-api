@@ -64,29 +64,16 @@ interface MdtObjectBuilder<P> extends MdtObject<P> {
 }
 
 
-interface MdtAction<T, P extends FieldDefinition[]> { 
-    paramsObject: { fields: P };
-    execute(r: ObjectWithFields<P>): void;
+interface MdtAction<T> { 
+    icon?: string; 
+    title: string;
+    paramsObject: { fields: { code: string, type: string }[] };
+        // | { (args: { builder: MdtObjectBuilder<P> }): MdtObject<P> };
+    canExecute: (args: { record: MdtRecord<T> }) => boolean;
+    execute: (args: { result: MdtActionResult, record: MdtRecord<T>, 
+        params: MdtRecord<any>,
+    }, di: DiServices) => void;
 }
-
-// icon?: string; 
-// title: string;
-// paramsObject: { fields: P };
-//      // | { (args: { builder: MdtObjectBuilder<P> }): MdtObject<P> };
-// canExecute: (args: { record: MdtRecord<T> }) => boolean;
-// execute: (args: { result: MdtActionResult, record: MdtRecord<T>, 
-//     // params?: MdtRecord<ObjectWithFields<P>>,
-//     x: ObjectWithFields<P>
-// }, di: DiServices) => void;
-
-
-type FieldDefinition = { code: string; type: 'string' | 'number' };
-
-type ObjectWithFields<Fields extends FieldDefinition[]> = {
-    [P in Fields[number] as P['code']]: P['type'] extends 'string' ? string : number;
-};
-
-
 
 interface MdtActionList<T> {
     add<P extends MdtObject<P>>(code: string, action: MdtAction<T>): void;

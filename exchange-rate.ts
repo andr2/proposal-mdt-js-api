@@ -48,7 +48,7 @@ exchangeRate.actions.add("freeze", {  // или .forRecord()
 	// 	.fk("user", app.objects.get("mdt.Principal")) // специализированные метод для FK
 	// 	.string("reason"),  // еще доступны простые функции для добавления number, date и др. самые популярные
 	canExecute: ({ record }) => record.get("FlagActive") != true, // исполняется на UI: или enabled() или available() ? x
-	execute: ({ result, record, params, x }) => {  // исполняется на сервере
+	execute: ({ result, record, params }) => {  // исполняется на сервере
 
 		// если может быть больше 1 подтверждения, то можно их объявлять так
 		let c2 = result.confirm("С какого числа вы хотите заменить курс?", {
@@ -59,7 +59,7 @@ exchangeRate.actions.add("freeze", {  // или .forRecord()
 		})
 		if (!c2.isConfirmed)
 			return c2;
-		record.set("ID_FrozenBy", params.get("user"))
+		record.set("ID_F2rozenBy", params.get("user"))
 		record.set("FreezeReason", params.get("reason"))
 		record.set("DateEnd", c2.resolvedCode == "tod" ? new Date() : undefined);
 		record.set("FlagActive", false);
